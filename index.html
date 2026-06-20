@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-time login and logout tracking system">
+  <title>Login & Logout Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header__brand">
+        <div class="header__logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="header__title">Login & Logout Tracker</h1>
+          <p class="header__subtitle">Real-time attendance monitoring · Philippine Standard Time</p>
+        </div>
+      </div>
+      <div class="header__actions">
+        <div class="connection-status" id="connectionStatus">
+          <span class="connection-status__dot"></span>
+          <span class="connection-status__text">Connecting...</span>
+        </div>
+        <button class="btn btn--icon" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard Stats -->
+    <section class="stats-grid">
+      <article class="stat-card stat-card--in">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+        </div>
+        <div class="stat-card__content">
+          <p class="stat-card__label">Total Log Ins</p>
+          <p class="stat-card__value" id="totalLogIns">0</p>
+        </div>
+      </article>
+      <article class="stat-card stat-card--out">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </div>
+        <div class="stat-card__content">
+          <p class="stat-card__label">Total Log Outs</p>
+          <p class="stat-card__value" id="totalLogOuts">0</p>
+        </div>
+      </article>
+      <article class="stat-card stat-card--active">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="stat-card__content">
+          <p class="stat-card__label">Active Users</p>
+          <p class="stat-card__value" id="activeUsers">0</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="main-grid">
+      <!-- Log In/Out Form -->
+      <section class="panel panel--form">
+        <div class="panel__header">
+          <h2 class="panel__title">Record Action</h2>
+          <p class="panel__desc">Enter your details and log in or out</p>
+        </div>
+        <form id="logForm" class="log-form">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Juan Dela Cruz"
+              required
+              autocomplete="name"
+            >
+          </div>
+          <div class="form-group">
+            <label for="section">Section</label>
+            <input
+              type="text"
+              id="section"
+              name="section"
+              placeholder="Section A"
+              required
+              autocomplete="organization"
+            >
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--in" data-action="IN">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+              Log In
+            </button>
+            <button type="button" class="btn btn--out" id="logOutBtn" data-action="OUT">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Log Out
+            </button>
+          </div>
+        </form>
+        <div id="formMessage" class="form-message" role="alert" hidden></div>
+      </section>
+
+      <!-- Currently Logged In Users -->
+      <section class="panel panel--active-users">
+        <div class="panel__header">
+          <h2 class="panel__title">Currently Logged In</h2>
+          <p class="panel__desc">Users with latest action as Log In</p>
+        </div>
+        <div class="active-users-list" id="activeUsersList">
+          <p class="empty-state">No users currently logged in</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Log History -->
+    <section class="panel panel--history">
+      <div class="panel__header panel__header--row">
+        <div>
+          <h2 class="panel__title">Activity History</h2>
+          <p class="panel__desc">All login and logout records · Updates in real time</p>
+        </div>
+        <button class="btn btn--secondary" id="exportCsvBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Search by name or section..."
+            aria-label="Search logs"
+          >
+        </div>
+        <div class="filter-tabs" role="tablist" aria-label="Filter by action type">
+          <button class="filter-tab filter-tab--active" data-filter="ALL" role="tab" aria-selected="true">All</button>
+          <button class="filter-tab" data-filter="IN" role="tab" aria-selected="false">Log In</button>
+          <button class="filter-tab" data-filter="OUT" role="tab" aria-selected="false">Log Out</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrapper">
+        <table class="log-table" id="logTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Section</th>
+              <th>Action Type</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+            <tr class="loading-row">
+              <td colspan="5">
+                <div class="loading-spinner"></div>
+                Loading records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-footer" id="tableFooter"></p>
+    </section>
+
+    <!-- Firebase Setup Notice -->
+    <div class="setup-notice" id="setupNotice" hidden>
+      <div class="setup-notice__content">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+          <strong>Firebase not configured</strong>
+          <p>Please add your Firebase credentials in <code>js/firebase-config.js</code> to enable real-time tracking. See README.md for setup instructions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
